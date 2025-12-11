@@ -1,0 +1,8 @@
+main {
+  background-color: #fce4ec; /* Soft rose pink background */
+  min-height: 100vh;
+}
+
+.content {
+  background-color: transparent;
+}

@@ -52,7 +52,46 @@
         <div class="info-block">
           <h3 class="info-title">History</h3>
           <p class="info-content">{{ getRoseInfo()?.history }}</p>
+        </div>
+
+        <!-- Care Information -->
+        <div class="info-block" *ngIf="getRoseInfo()?.careInfo">
+          <h3 class="info-title">Care Information</h3>
+          <div class="care-details">
+            <div class="care-item">
+              <strong>Best Location:</strong>
+              <p>{{ getRoseInfo()?.careInfo?.location }}</p>
+            </div>
+            <div class="care-item">
+              <strong>Temperature:</strong>
+              <p>{{ getRoseInfo()?.careInfo?.temperature }}</p>
+            </div>
+            <div class="care-item">
+              <strong>Soil Requirements:</strong>
+              <p>{{ getRoseInfo()?.careInfo?.soil }}</p>
+            </div>
+            <div class="care-item">
+              <strong>Watering:</strong>
+              <p>{{ getRoseInfo()?.careInfo?.watering }}</p>
+            </div>
+            <div class="care-item">
+              <strong>Sunlight:</strong>
+              <p>{{ getRoseInfo()?.careInfo?.sunlight }}</p>
+            </div>
+            <div class="care-item">
+              <strong>Humidity:</strong>
+              <p>{{ getRoseInfo()?.careInfo?.humidity }}</p>
+            </div>
           </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+          <button class="add-to-cart-btn" (click)="addToCart()" [class.added]="addedToCart">
+            {{ addedToCart ? '✓ Added to Cart!' : 'Add to Cart' }}
+          </button>
+          <button class="order-now-btn" (click)="orderNow()">Order Now</button>
+        </div>
       </div>
     </div>
 

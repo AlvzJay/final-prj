@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HousingService } from '../housing';
 import { HousingLocationInfo } from '../housinglocation';
 import { CommonModule } from '@angular/common';
+import { CartService } from '../cart.service';
 
 interface RoseInfo {
   origin: string;
@@ -10,6 +11,14 @@ interface RoseInfo {
   uses: string[];
   whereToFind: string;
   history: string;
+  careInfo?: {
+    location: string;
+    temperature: string;
+    soil: string;
+    watering: string;
+    sunlight: string;
+    humidity: string;
+  };
 }
 
 @Component({
@@ -22,7 +31,9 @@ export class Details {
   route: ActivatedRoute = inject(ActivatedRoute);
   router = inject(Router);
   housingService = inject(HousingService);
+  cartService = inject(CartService);
   housingLocation: HousingLocationInfo | undefined;
+  addedToCart = false;
 
   private roseInfoMap: { [key: string]: RoseInfo } = {
     'Hybrid Tea Rose': {
@@ -30,7 +41,15 @@ export class Details {
       description: 'Hybrid Tea Roses are the most popular type of rose, known for their large, well-formed blooms with a high center. They typically produce one flower per stem and have a strong, classic rose fragrance. The flowers come in a wide range of colors and are perfect for cutting.',
       uses: ['Cut flowers', 'Garden display', 'Floral arrangements', 'Perfume production', 'Wedding bouquets'],
       whereToFind: 'Widely available in nurseries, garden centers, and online retailers worldwide. Common in temperate climates across North America, Europe, and Asia.',
-      history: 'The first Hybrid Tea Rose was created in 1867 by French breeder Jean-Baptiste Guillot when he crossed a Tea Rose with a Hybrid Perpetual. The variety was named "La France" and marked the beginning of modern rose breeding. This breakthrough revolutionized rose cultivation, leading to thousands of new varieties with improved disease resistance, color range, and bloom quality.'
+      history: 'The first Hybrid Tea Rose was created in 1867 by French breeder Jean-Baptiste Guillot when he crossed a Tea Rose with a Hybrid Perpetual. The variety was named "La France" and marked the beginning of modern rose breeding. This breakthrough revolutionized rose cultivation, leading to thousands of new varieties with improved disease resistance, color range, and bloom quality.',
+      careInfo: {
+        location: 'Outdoor garden beds, containers on patios or balconies. Best in full sun areas with good air circulation.',
+        temperature: 'Ideal: 65-75°F (18-24°C). Can tolerate 20-90°F (-7 to 32°C) with protection.',
+        soil: 'Well-draining, loamy soil with pH 6.0-6.5. Mix compost or organic matter for best results.',
+        watering: 'Water deeply 2-3 times per week. Keep soil moist but not waterlogged. Water at base, avoid wetting leaves.',
+        sunlight: 'Full sun (6-8 hours daily). Morning sun is ideal to dry dew and prevent disease.',
+        humidity: 'Moderate humidity (40-60%). Good air circulation helps prevent fungal diseases.'
+      }
     },
     'Grandiflora Rose': {
       origin: 'United States, 1954',
@@ -211,10 +230,42 @@ export class Details {
     if (!this.housingLocation) {
       return undefined;
     }
-    return this.roseInfoMap[this.housingLocation.name];
+    const info = this.roseInfoMap[this.housingLocation.name];
+    if (info && !info.careInfo) {
+      info.careInfo = this.getDefaultCareInfo();
+    }
+    return info;
+  }
+
+  private getDefaultCareInfo() {
+    return {
+      location: 'Outdoor garden beds or containers. Best in areas with good air circulation and protection from strong winds.',
+      temperature: 'Ideal: 60-75°F (15-24°C). Most roses tolerate 20-85°F (-7 to 29°C) with proper care.',
+      soil: 'Well-draining, fertile soil with pH 6.0-7.0. Add compost or organic matter for best growth.',
+      watering: 'Water deeply 1-2 times per week. Keep soil consistently moist but not waterlogged. Water at base of plant.',
+      sunlight: 'Full sun (6+ hours daily). Morning sun is preferred to help dry morning dew.',
+      humidity: 'Moderate humidity (40-60%). Ensure good air circulation to prevent fungal issues.'
+    };
   }
 
   goBack() {
     this.router.navigate(['/']);
+  }
+
+  addToCart() {
+    if (this.housingLocation) {
+      this.cartService.addToCart(this.housingLocation);
+      this.addedToCart = true;
+      setTimeout(() => {
+        this.addedToCart = false;
+      }, 2000);
+    }
+  }
+
+  orderNow() {
+    if (this.housingLocation) {
+      this.cartService.addToCart(this.housingLocation);
+      this.router.navigate(['/']);
+    }
   }
 }

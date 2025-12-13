@@ -1,15 +1,17 @@
-
-import {Component} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {RouterModule} from '@angular/router';
+import {CommonModule} from '@angular/common';
 import {HousingLocation} from '../housing-location/housing-location';
 import {HousingLocationInfo} from '../housinglocation';
+import {CartService} from '../cart.service';
 
 @Component({
   selector: 'app-home',
-  imports: [HousingLocation, RouterModule],
+  standalone: true,
+  imports: [HousingLocation, RouterModule, CommonModule],
   template: `
     <section class="search-bar">
-      <img class="search-logo" src="/Rlogo.png" alt="Rose logo" />
+      <img class="search-logo" src="Rlogo.png" alt="Rose logo" />
       <form class="search-form">
         <input 
           type="text" 
@@ -21,6 +23,28 @@ import {HousingLocationInfo} from '../housinglocation';
       </form>
       <a class="about-button" routerLink="/about">About Us</a>
     </section>
+    
+    <!-- Cart Section -->
+    <section class="cart-section" *ngIf="cartService.getCart().length > 0">
+      <div class="cart-header">
+        <h2>Your Cart ({{ cartService.getCartCount() }})</h2>
+      </div>
+      <div class="cart-items">
+        @for(rose of cartService.getCart(); track $index; let i = $index) {
+          <div class="cart-item">
+            <img [src]="rose.photo" [alt]="rose.name" class="cart-image" />
+            <div class="cart-info">
+              <h3>{{ rose.name }}</h3>
+            </div>
+            <button class="remove-btn" (click)="removeFromCart(i)">×</button>
+          </div>
+        }
+      </div>
+      <div class="cart-footer">
+        <button class="order-all-btn" (click)="orderAll()">Order Now</button>
+      </div>
+    </section>
+
     <section class="results">
       @for(housingLocation of filteredLocationList; track $index) {
         <app-housing-location [housingLocation]="housingLocation"></app-housing-location>
@@ -30,6 +54,7 @@ import {HousingLocationInfo} from '../housinglocation';
   styleUrls: ['./home.css'],
 })
 export class Home {
+  cartService = inject(CartService);
   filteredLocationList: HousingLocationInfo[] = [];
 
   housingLocationList: HousingLocationInfo[] = [
@@ -38,7 +63,7 @@ export class Home {
       name: 'Hybrid Tea Rose',
       city: 'Chicago',
       state: 'IL',
-      photo: '/hybrid_tea_rose.jpg',
+      photo: 'hybrid_tea_rose.jpg',
       availableUnits: 4,
       wifi: true,
       laundry: true,
@@ -48,7 +73,7 @@ export class Home {
       name: 'Grandiflora Rose',
       city: 'Santa Monica',
       state: 'CA',
-      photo: '/grandiflora_rose.jpg',
+      photo: 'grandiflora_rose.jpg',
       availableUnits: 0,
       wifi: false,
       laundry: true,
@@ -58,7 +83,7 @@ export class Home {
       name: 'Floribunda Rose',
       city: 'Juneau',
       state: 'AK',
-      photo: '/floribunda_rose.jpg',
+      photo: 'floribunda_rose.jpg',
       availableUnits: 1,
       wifi: false,
       laundry: false,
@@ -68,7 +93,7 @@ export class Home {
       name: 'Climbing Rose',
       city: 'Chicago',
       state: 'IL',
-      photo: '/climbing_rose.jpg',
+      photo: 'climbing_rose.jpg',
       availableUnits: 1,
       wifi: true,
       laundry: false,
@@ -78,7 +103,7 @@ export class Home {
       name: 'Miniature Rose',
       city: 'Gary',
       state: 'IN',
-      photo: '/miniature_rose.jpg',
+      photo: 'miniature_rose.jpg',
       availableUnits: 1,
       wifi: true,
       laundry: false,
@@ -88,7 +113,7 @@ export class Home {
       name: 'Shrub Rose',
       city: 'Oakland',
       state: 'CA',
-      photo: '/shrub_rose.jpg',
+      photo: 'shrub_rose.jpg',
       availableUnits: 2,
       wifi: true,
       laundry: true,
@@ -98,7 +123,7 @@ export class Home {
       name: 'English Rose',
       city: 'Oakland',
       state: 'CA',
-      photo: '/english_rose.jpg',
+      photo: 'english_rose.jpg',
       availableUnits: 5,
       wifi: true,
       laundry: true,
@@ -108,7 +133,7 @@ export class Home {
       name: 'Wild Rose',
       city: 'Oakland',
       state: 'CA',
-      photo: '/wild_rose.jpg',
+      photo: 'wild_rose.jpg',
       availableUnits: 2,
       wifi: true,
       laundry: true,
@@ -118,7 +143,7 @@ export class Home {
       name: 'Damask Rose',
       city: 'Oakland',
       state: 'CA',
-      photo: '/damask_rose.jpg',
+      photo: 'damask_rose.jpg',
       availableUnits: 10,
       wifi: false,
       laundry: false,
@@ -128,7 +153,7 @@ export class Home {
       name: 'Tea Rose',
       city: 'Portland',
       state: 'OR',
-      photo: '/tea_rose.jpg',
+      photo: 'tea_rose.jpg',
       availableUnits: 6,
       wifi: true,
       laundry: true,
@@ -138,7 +163,7 @@ export class Home {
       name: 'Polyantha Rose',
       city: '',
       state: '',
-      photo: '/polyantha_rose.jpg',
+      photo: 'polyantha_rose.jpg',
       availableUnits: 0,
       wifi: false,
       laundry: false,
@@ -148,7 +173,7 @@ export class Home {
       name: 'Bourbon Rose',
       city: '',
       state: '',
-      photo: '/bourbon_rose.jpg',
+      photo: 'bourbon_rose.jpg',
       availableUnits: 0,
       wifi: false,
       laundry: false,
@@ -158,7 +183,7 @@ export class Home {
       name: 'China Rose',
       city: '',
       state: '',
-      photo: '/china_rose.jpg',
+      photo: 'china_rose.jpg',
       availableUnits: 0,
       wifi: false,
       laundry: false,
@@ -168,7 +193,7 @@ export class Home {
       name: 'Gallica Rose',
       city: '',
       state: '',
-      photo: '/gallica_rose.jpg',
+      photo: 'gallica_rose.jpg',
       availableUnits: 0,
       wifi: false,
       laundry: false,
@@ -178,7 +203,7 @@ export class Home {
       name: 'Moss Rose',
       city: '',
       state: '',
-      photo: '/moss_rose.jpeg',
+      photo: 'moss_rose.jpeg',
       availableUnits: 0,
       wifi: false,
       laundry: false,
@@ -188,7 +213,7 @@ export class Home {
       name: 'Rambler Rose',
       city: '',
       state: '',
-      photo: '/rambler_rose.jpg',
+      photo: 'rambler_rose.jpg',
       availableUnits: 0,
       wifi: false,
       laundry: false,
@@ -198,7 +223,7 @@ export class Home {
       name: 'Groundcover Rose',
       city: '',
       state: '',
-      photo: '/ground_cover_rose.jpg',
+      photo: 'ground_cover_rose.jpg',
       availableUnits: 0,
       wifi: false,
       laundry: false,
@@ -208,7 +233,7 @@ export class Home {
       name: 'Patio Rose',
       city: '',
       state: '',
-      photo: '/patio_rose.jpg',
+      photo: 'patio_rose.jpg',
       availableUnits: 0,
       wifi: false,
       laundry: false,
@@ -218,7 +243,7 @@ export class Home {
       name: 'Alba Rose',
       city: '',
       state: '',
-      photo: '/alba_rose.jpg',
+      photo: 'alba_rose.jpg',
       availableUnits: 0,
       wifi: false,
       laundry: false,
@@ -228,7 +253,7 @@ export class Home {
       name: 'Centifolia Rose',
       city: '',
       state: '',
-      photo: '/centi_folia_rose.jpg',
+      photo: 'centi_folia_rose.jpg',
       availableUnits: 0,
       wifi: false,
       laundry: false,
@@ -238,7 +263,7 @@ export class Home {
       name: 'Rugosa Rose',
       city: '',
       state: '',
-      photo: '/rugosa_rose.jpeg',
+      photo: 'rugosa_rose.jpeg',
       availableUnits: 0,
       wifi: false,
       laundry: false,
@@ -248,7 +273,7 @@ export class Home {
       name: 'Noisette Rose',
       city: '',
       state: '',
-      photo: '/noisette_rose.jpg',
+      photo: 'noisette_rose.jpg',
       availableUnits: 0,
       wifi: false,
       laundry: false,
@@ -258,7 +283,7 @@ export class Home {
       name: 'Portland Rose',
       city: '',
       state: '',
-      photo: '/portland_rose.jpg',
+      photo: 'portland_rose.jpg',
       availableUnits: 0,
       wifi: false,
       laundry: false,
@@ -268,7 +293,7 @@ export class Home {
       name: 'Hybrid Perpetual Rose',
       city: '',
       state: '',
-      photo: '/hybrid_perpetual_rose.jpg',
+      photo: 'hybrid_perpetual_rose.jpg',
       availableUnits: 0,
       wifi: false,
       laundry: false,
@@ -278,7 +303,7 @@ export class Home {
       name: 'Landscape Rose',
       city: '',
       state: '',
-      photo: '/landscape_rose.jpg',
+      photo: 'landscape_rose.jpg',
       availableUnits: 0,
       wifi: false,
       laundry: false,
@@ -299,5 +324,16 @@ export class Home {
       housingLocation => 
         housingLocation?.name.toLowerCase().includes(text.toLowerCase())
     );
+  }
+
+  orderAll(): void {
+    if (this.cartService.getCart().length > 0) {
+      alert('Order placed successfully! Your cart has been cleared.');
+      this.cartService.clearCart();
+    }
+  }
+
+  removeFromCart(index: number): void {
+    this.cartService.removeFromCart(index);
   }
 }

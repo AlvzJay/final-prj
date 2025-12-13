@@ -18,14 +18,14 @@ import { RouterModule } from '@angular/router';
 
       <div class="team">
         <div class="card">
-          <img src="/Person1.jpg" alt="Person One" class="avatar" />
+          <img src="Person1.jpg" alt="Person One" class="avatar" />
           <h2>Jaygee Alvez</h2>
           <p>Role: Developer / Designer / Tambay / Waiter / Waitress / Cook / Bartender / Server / Barista / Cashier / Host / Soldier / Farmer / Chef / Baker </p>
           <p>Contact: alvezjaygee@gmail.com</p>
           <p>Bio: Professional Tambay who accidentally learned how to code. I can design your app, cook your dinner, and serve your drinks, but I'd rather just hang out. 🤷‍♂️</p>
         </div>
         <div class="card">
-          <img src="/person2.jpg" alt="Person Two" class="avatar" />
+          <img src="person2.jpg" alt="Person Two" class="avatar" />
           <h2>Ken Chin Baras</h2>
           <p>2 years experience front end developer
           <br> 5 years culinary experience
